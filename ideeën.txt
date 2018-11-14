@@ -1,0 +1,5 @@
+Voeg de featuring artists toe aan elk nummer
+
+Zet het album rechts vanonder (1,1)
+
+Voeg een "Now Playing" toe rechts vanboven (0,1): check om de zoveel seconden wat nu speelt.
