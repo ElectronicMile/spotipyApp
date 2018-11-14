@@ -72,33 +72,34 @@ class App:
 		self.master = master
 
 		self.currentWidgets = []
+		self.bgcolor = "#2ECC71"
 
-		master.configure(background="#2ECC71")
+		master.configure(background=self.bgcolor)
 
 		master.title("Spotipy GUI")
 		master.geometry("800x800")
 
-		self.queryframe = LabelFrame(master, text="Query", borderwidth=3, padx=5, pady=5, relief=GROOVE)
+		self.queryframe = LabelFrame(master, text="Query", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg=self.bgcolor)
 		self.queryframe.grid(row=0, column=0, sticky=E + W + N + S)
 
-		self.resultframe = LabelFrame(master, text="Result", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg="#2ECC71")
+		self.resultframe = LabelFrame(master, text="Result", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg=self.bgcolor)
 		self.resultframe.grid(row=1, column=0, sticky=E + W + N + S)
 
-		welcome = Label(self.queryframe, text="Welcome.")
+		welcome = Label(self.queryframe, text="Welcome.", bg=self.bgcolor)
 		welcome.grid(sticky=W, column=0, row=0)
 
-		lbl = Label(self.queryframe, text="Enter an album URI:")
+		lbl = Label(self.queryframe, text="Enter an album URI:", bg=self.bgcolor)
 		lbl.grid(sticky=W, column=0, row=1)
 
-		txt = Entry(self.queryframe, width=30)
+		txt = Entry(self.queryframe, width=30, bg="#229954")
 		txt.grid(sticky=W, column=0, row=2)
 		txt.focus()
 		self.txt = txt
 
-		btn = Button(self.queryframe, text="Enter", command=self.search)
+		btn = Button(self.queryframe, text="Enter", command=self.search, bg=self.bgcolor)
 		btn.configure(background="grey")
 		btn.grid(sticky=W, column=0, row=3)
-		self.queryframe.bind('<Return>', self.search2)
+		self.master.bind('<Return>', self.search2)
 
 
 	def search(self):
