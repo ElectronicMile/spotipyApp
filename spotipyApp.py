@@ -99,7 +99,11 @@ class App:
 		btn = Button(self.queryframe, text="Enter", command=self.search, bg=self.bgcolor)
 		btn.configure(background="grey")
 		btn.grid(sticky=W, column=0, row=3)
+
+
 		self.master.bind('<Return>', self.search2)
+		self.master.bind('<Command-a>', self.selectall)
+		#self.master.bind('<Control-a>', self.selectall) Will work for Windows?
 
 
 	def search(self):
@@ -117,6 +121,14 @@ class App:
 
 	def search2(self, Event):
 		self.search()
+
+	def selectall(self, Event):
+		print('event.widget.get():', Event.widget.get())
+
+		# select text
+		Event.widget.select_range(0, 'end')
+		# move cursor to the end
+		Event.widget.icursor('end')
 
 if __name__ == "__main__":
 	logging.basicConfig(level=logging.INFO)
