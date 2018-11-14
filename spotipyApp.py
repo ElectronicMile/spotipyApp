@@ -13,6 +13,7 @@ def showresults(window, results):
 
 	albumname = results["name"]
 	releasedate = results["release_date"]
+	rdp = results["release_date_precision"]
 	albumartists = []
 	for art in results["artists"]:
 		name = art["name"]
@@ -20,7 +21,7 @@ def showresults(window, results):
 
 	currAlbumWidgets = []
 
-	resulttext = "Album \"%s\" by %s, released %s. Tracks are:" % (albumname, format_album_artists(albumartists), formatreld(releasedate))
+	resulttext = "Album \"%s\" by %s, released %s %s. Tracks are:" % (albumname, format_album_artists(albumartists), rdpprep(rdp), releasedate)
 	lbl = Label(window, text=resulttext)
 	lbl.configure(bg="grey")
 	lbl.grid(column=0, row=4)

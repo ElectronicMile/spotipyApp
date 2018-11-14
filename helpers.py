@@ -6,8 +6,10 @@ def format_album_artists(l):
 
 	return outp
 
-def formatreld(rd):
-	if len(rd) > 4:
-		return "on %s" % rd
+def rdpprep(rdp):
+	if rdp eq "day":
+		return "on"
+	elif rdp eq "year":
+		return "in"
 	else:
-		return "in %s" % rd
+		return "in"
