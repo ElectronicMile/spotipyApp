@@ -72,16 +72,16 @@ class App:
 
 		self.currentWidgets = []
 
-		master.configure(background="grey")
+		master.configure(background="#2ECC71")
 
 		master.title("Spotipy GUI")
 		master.geometry("800x800")
 
-		self.queryframe = LabelFrame(master, text="Query", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg="green")
+		self.queryframe = LabelFrame(master, text="Query", borderwidth=3, padx=5, pady=5, relief=GROOVE)
 		self.queryframe.grid(row=0, column=0, sticky=E + W + N + S)
 
-		self.resultframe = LabelFrame(master, text="Result", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg="green")
-		self.resultframe.grid(row=0, column=1, sticky=E + W + N + S)
+		self.resultframe = LabelFrame(master, text="Result", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg="#2ECC71")
+		self.resultframe.grid(row=1, column=0, sticky=E + W + N + S)
 
 		welcome = Label(self.queryframe, text="Welcome.")
 		welcome.grid(sticky=W, column=0, row=0)
