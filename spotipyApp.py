@@ -20,7 +20,8 @@ def showresults(window, results):
 
 	currAlbumWidgets = []
 
-	lbl = Label(window, text="Album \"%s\" by %s, released on %s. Tracks are:" % (albumname, format_album_artists(albumartists), releasedate))
+	resulttext = "Album \"%s\" by %s, released %s. Tracks are:" % (albumname, format_album_artists(albumartists), formatreld(releasedate))
+	lbl = Label(window, text=resulttext)
 	lbl.configure(bg="grey")
 	lbl.grid(column=0, row=4)
 	currAlbumWidgets.append(lbl)
