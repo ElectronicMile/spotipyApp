@@ -7,9 +7,9 @@ def format_album_artists(l):
 	return outp
 
 def rdpprep(rdp):
-	if rdp eq "day":
+	if rdp == "day":
 		return "on"
-	elif rdp eq "year":
+	elif rdp == "year":
 		return "in"
 	else:
 		return "in"
