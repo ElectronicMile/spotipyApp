@@ -80,7 +80,7 @@ class App:
 		self.queryframe = LabelFrame(master, text="Query", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg="green")
 		self.queryframe.grid(row=0, column=0, sticky=E + W + N + S)
 
-		self.resultframe = LabelFrame(master, text="Query", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg="green")
+		self.resultframe = LabelFrame(master, text="Result", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg="green")
 		self.resultframe.grid(row=0, column=1, sticky=E + W + N + S)
 
 		welcome = Label(self.queryframe, text="Welcome.")
