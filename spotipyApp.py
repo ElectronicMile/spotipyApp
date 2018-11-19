@@ -11,45 +11,34 @@ from helpers import *
 
 def showresults(window, results):
 
-	albumname = results["name"]
-	releasedate = results["release_date"]
-	rdp = results["release_date_precision"]
-	albumartists = []
-	for art in results["artists"]:
-		name = art["name"]
-		albumartists.append(name)
-
+	res = QueryResult(results)
 	currAlbumWidgets = []
 
-	resulttext = "Album \"%s\" by %s, released %s %s. Tracks are:" % (albumname, format_album_artists(albumartists), rdpprep(rdp), releasedate)
-	lbl = Label(window, text=resulttext)
+	lbl = Label(window, text=res.parseInfo())
 	lbl.configure(bg="grey")
 	lbl.grid(column=0, row=4)
 	currAlbumWidgets.append(lbl)
 
-	tracks = []
 	id = 0
-	for tr in results['tracks']["items"]:
-		tracks.append(tr["name"])
+	for name in res.tracks["name"]:
 		id += 1
-		label = Label(window, text="%d: %s" %(id, tr["name"]))
+		lbltext = "%d: %s" % (id, name)
+		label = Label(window, text=lbltext)
 		label.configure(bg="grey")
 		label.grid(sticky=W, column=0, row=id + 4)
 		currAlbumWidgets.append(label)
 
-	coverurl = results["images"][0]["url"]
-	logging.info("URL is %s" % coverurl)
-	raw_data = urllib.urlopen(coverurl).read()
+	logging.info("URL is %s" % res.coverurl)
+	raw_data = urllib.urlopen(res.coverurl).read()
 	im = imImage.open(io.BytesIO(raw_data))
 	im = im.resize((350, 350), imImage.ANTIALIAS)
 	image = ImageTk.PhotoImage(im)
 	imageLabel = Label(window, image=image)
 	imageLabel.image = image
-	imageLabel.grid(column=0, row=id+5)
+	imageLabel.grid(column=0, row=id + 5)
 	currAlbumWidgets.append(imageLabel)
 
 	return currAlbumWidgets
-
 
 class App:
 
@@ -111,7 +100,7 @@ class App:
 		for w in self.currentWidgets:
 			w.destroy()
 		album_uri = self.txt.get()
-		#album_uri = "spotify:album:3NnGeD4rLyOOzmlsb2ZLfO"
+		#album_uri = "spotify:album:07RagZtMuBbLBnaWJbD52h"
 		if album_uri != "":
 			results = self.sp.album(album_id=album_uri)
 			logging.info("Showing info for following album:\n%s" % results)
