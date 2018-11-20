@@ -33,7 +33,7 @@ class QueryResult:
 		albartoutp += self.albumartists[-1]
 		rdpprep = self.rdpformat()
 
-		finaloutp = "Album \"%s\" by %s, released %s %s. Tracks are:" % (self.albumname, albartoutp, rdpprep, self.releasedate)
+		finaloutp = "Album \"%s\" by %s, released %s %s.\nTracks are:" % (self.albumname, albartoutp, rdpprep, self.releasedate)
 		return finaloutp
 
 

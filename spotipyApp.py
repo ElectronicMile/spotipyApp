@@ -90,6 +90,8 @@ class App:
 		btn.configure(background="grey")
 		btn.grid(sticky=W, column=0, row=3)
 
+		self.errorText = Label(self.resultframe, text="Invalid URI", bg=self.bgcolor)
+
 
 		self.master.bind('<Return>', self.search2)
 		self.master.bind('<Command-a>', self.selectall)
@@ -101,13 +103,12 @@ class App:
 			w.destroy()
 		album_uri = self.txt.get()
 		#album_uri = "spotify:album:07RagZtMuBbLBnaWJbD52h"
-		if album_uri != "":
+		try:
 			results = self.sp.album(album_id=album_uri)
 			logging.info("Showing info for following album:\n%s" % results)
 			self.currentWidgets = showresults(self.resultframe, results)
-		else:
-			testText = Label(self.resultframe, text="Test layout")
-			testText.pack()
+		except spotipy.SpotifyException:
+			self.errorText.pack()
 
 	def search2(self, Event):
 		self.search()
