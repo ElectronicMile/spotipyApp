@@ -75,6 +75,9 @@ class App:
 		self.resultframe = LabelFrame(master, text="Result", borderwidth=3, padx=5, pady=5, relief=GROOVE, bg=self.bgcolor)
 		self.resultframe.grid(row=1, column=0, sticky=E + W + N + S)
 
+		self.controlframe = LabelFrame(master, text="Play", borderwidth=1, padx=5, pady=5, relief=GROOVE, bg=self.bgcolor)
+		self.controlframe.grid(row=0, column=1, sticky=E + N)
+
 		welcome = Label(self.queryframe, text="Welcome.", bg=self.bgcolor)
 		welcome.grid(sticky=W, column=0, row=0)
 
@@ -92,6 +95,8 @@ class App:
 
 		self.errorText = Label(self.resultframe, text="Invalid URI", bg=self.bgcolor)
 
+		playbtn = Button(self.controlframe, text="play", bg=self.bgcolor)
+		playbtn.grid(sticky=W, column=0, row=1)
 
 		self.master.bind('<Return>', self.search2)
 		self.master.bind('<Command-a>', self.selectall)
