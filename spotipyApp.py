@@ -48,6 +48,7 @@ urlplay = 'https://api.spotify.com/v1/me/player/play'
 # print currentlyplaying
 
 try:
+	# pause and play
 	sp._internal_call('PUT', urlpause, payload, params)
 	sp._internal_call('PUT', urlplay, payload, params)
 
