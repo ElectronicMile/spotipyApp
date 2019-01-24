@@ -109,9 +109,14 @@ class App:
 		album_uri = self.txt.get()
 		#album_uri = "spotify:album:07RagZtMuBbLBnaWJbD52h"
 		try:
-			results = self.sp.album(album_id=album_uri)
-			logging.info("Showing info for following album:\n%s" % results)
-			self.currentWidgets = showresults(self.resultframe, results)
+			if album_uri != "spotify:track:4wupMhFWAQzP8CGROC1D2r":
+				results = self.sp.album(album_id=album_uri)
+				logging.info("Showing info for following album:\n%s" % results)
+				self.currentWidgets = showresults(self.resultframe, results)
+			else:
+				results = self.sp.audio_features(tracks=["spotify:track:4wupMhFWAQzP8CGROC1D2r"])
+				#results = self.sp.audio_analysis(track_id="spotify:track:4wupMhFWAQzP8CGROC1D2r")
+				print results
 		except spotipy.SpotifyException:
 			self.errorText.pack()
 
@@ -132,3 +137,4 @@ if __name__ == "__main__":
 	spotipyApp = App(window)
 	window.mainloop()
 
+#spotify:album:7lOKvvK9dCayXwR7925yk4
