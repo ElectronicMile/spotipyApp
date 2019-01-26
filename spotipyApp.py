@@ -9,24 +9,6 @@ import sys
 
 logging.basicConfig(level=logging.INFO)
 
-"""parser = argparse.ArgumentParser(description="Input mode: artist, playlist, etc.")
-parser.add_argument("-s", "--source", help="The source from which you want to take album covers. Options are 'artist' and 'playlist'",
-					required=True)
-parser.add_argument("-u", "--uri", help="The URI of the artist or playlist for which you want to collect the album covers",
-					required=True)
-args = parser.parse_args()
-
-if args.source != "artist" and args.source != "playlist":
-	logging.error("Not a valid input source. Choose 'artist' or 'playlist'.")
-	sys.exit(0)
-
-source = args.source
-uri = args.uri
-
-if source not in uri:
-	logging.error("URI does not match source: needs to be an artist or a playlist.")
-	sys.exit(0)
-"""
 
 def login():
 	print(sys.argv[0])
