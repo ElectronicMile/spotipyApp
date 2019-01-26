@@ -42,24 +42,11 @@ def showresults(window, results):
 
 class App:
 
-	def __init__(self, master):
-		self.client_id = "580cb72fd1364d10aa8bd0f8d4bf5c32"
-		self.client_secret = "fa391051c65748b7b7b35d7d6d4faa93"
-		self.redirect_uri = "https://www.google.be/"
-		self.scope = 'user-library-read'
+	def __init__(self, master, sp):
 
-		self.username = "1136425634"
-
-		token = util.prompt_for_user_token(self.username, self.scope, client_id=self.client_id,
-										   client_secret=self.client_secret,
-										   redirect_uri=self.redirect_uri)
-		if token:
-			self.sp = spotipy.Spotify(auth=token)
-		else:
-			logging.ERROR("Cannot login with this user account")
-			sys.exit(0)
 
 		self.master = master
+		self.sp = sp
 
 		self.currentWidgets = []
 		self.bgcolor = "#2ECC71"
@@ -95,13 +82,18 @@ class App:
 
 		self.errorText = Label(self.resultframe, text="Invalid URI", bg=self.bgcolor)
 
-		playbtn = Button(self.controlframe, text="play", bg=self.bgcolor)
+		playbtn = Button(self.controlframe, text="play", command=self.play, bg=self.bgcolor)
 		playbtn.grid(sticky=W, column=0, row=1)
+
+		playbtn = Button(self.controlframe, text="pause", command=self.pause, bg=self.bgcolor)
+		playbtn.grid(sticky=W, column=1, row=1)
 
 		self.master.bind('<Return>', self.search2)
 		self.master.bind('<Command-a>', self.selectall)
 		#self.master.bind('<Control-a>', self.selectall) Will work for Windows?
 
+
+	# control commands: search, play, etc.
 
 	def search(self):
 		for w in self.currentWidgets:
@@ -120,6 +112,22 @@ class App:
 		except spotipy.SpotifyException:
 			self.errorText.pack()
 
+	def play(self):
+		params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
+		payload = None
+		urlcurr = 'https://api.spotify.com/v1/me/player'
+		urlpause = 'https://api.spotify.com/v1/me/player/pause'
+		urlplay = 'https://api.spotify.com/v1/me/player/play'
+		self.sp._internal_call('PUT', urlplay, payload, params)
+
+	def pause(self):
+		params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
+		payload = None
+		urlpause = 'https://api.spotify.com/v1/me/player/pause'
+		self.sp._internal_call('PUT', urlpause, payload, params)
+
+	# commands for keyboard shortcuts
+
 	def search2(self, Event):
 		self.search()
 
@@ -131,10 +139,10 @@ class App:
 		# move cursor to the end
 		Event.widget.icursor('end')
 
-if __name__ == "__main__":
+def rungui(sp):
 	logging.basicConfig(level=logging.INFO)
 	window = Tk()
-	spotipyApp = App(window)
+	spotipyApp = App(window, sp)
 	window.mainloop()
 
 #spotify:album:7lOKvvK9dCayXwR7925yk4

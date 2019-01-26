@@ -3,6 +3,7 @@ import spotipy.util as util
 import logging
 import argparse
 import sys
+from spotipyGUI import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -24,19 +25,23 @@ if source not in uri:
 	logging.error("URI does not match source: needs to be an artist or a playlist.")
 	sys.exit(0)
 """
-client_id = "580cb72fd1364d10aa8bd0f8d4bf5c32"
-client_secret = "fa391051c65748b7b7b35d7d6d4faa93"
-redirect_uri = "https://www.google.be/"
-scope = 'user-modify-playback-state'
 
-username = "1136425634"
+def login():
+	client_id = "580cb72fd1364d10aa8bd0f8d4bf5c32"
+	client_secret = "fa391051c65748b7b7b35d7d6d4faa93"
+	redirect_uri = "https://www.google.be/"
+	scope = 'user-modify-playback-state user-library-read'
 
-token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
-if token:
-	sp = spotipy.Spotify(auth=token)
-else:
-	logging.ERROR("Cannot login with this user account")
-	sys.exit(0)
+	username = "1136425634"
+
+	token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+	if token:
+		sp = spotipy.Spotify(auth=token)
+	else:
+		logging.ERROR("Cannot login with this user account")
+		sys.exit(0)
+
+	return sp
 
 params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
 payload = None
@@ -48,10 +53,9 @@ urlplay = 'https://api.spotify.com/v1/me/player/play'
 # print currentlyplaying
 
 try:
-	# pause and play
-	sp._internal_call('PUT', urlpause, payload, params)
-	sp._internal_call('PUT', urlplay, payload, params)
-
+	sp = login()
+	rungui(sp)
 except spotipy.SpotifyException:
-	logging.error("Something went wrong. Please check the URI. Also, an internet connection is required.")
+	logging.error("Could not log in. Check user data.")
+	sys.exit(0)
 
