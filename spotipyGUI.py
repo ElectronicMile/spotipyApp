@@ -108,7 +108,7 @@ class App:
 			else:
 				results = self.sp.audio_features(tracks=["spotify:track:4wupMhFWAQzP8CGROC1D2r"])
 				#results = self.sp.audio_analysis(track_id="spotify:track:4wupMhFWAQzP8CGROC1D2r")
-				print results
+				logging.INFO(results)
 		except spotipy.SpotifyException:
 			self.errorText.pack()
 
@@ -132,8 +132,6 @@ class App:
 		self.search()
 
 	def selectall(self, Event):
-		print('event.widget.get():', Event.widget.get())
-
 		# select text
 		Event.widget.select_range(0, 'end')
 		# move cursor to the end

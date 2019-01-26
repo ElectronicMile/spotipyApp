@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+
 import spotipy
 import spotipy.util as util
 import logging
 import argparse
 import sys
-from spotipyGUI import *
+#from spotipyGUI import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -27,14 +29,12 @@ if source not in uri:
 """
 
 def login():
-	client_id = "580cb72fd1364d10aa8bd0f8d4bf5c32"
-	client_secret = "fa391051c65748b7b7b35d7d6d4faa93"
-	redirect_uri = "https://www.google.be/"
+	print(sys.argv[0])
 	scope = 'user-modify-playback-state user-library-read'
 
 	username = "1136425634"
 
-	token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+	token = util.prompt_for_user_token(username, scope)
 	if token:
 		sp = spotipy.Spotify(auth=token)
 	else:
@@ -54,7 +54,9 @@ urlplay = 'https://api.spotify.com/v1/me/player/play'
 
 try:
 	sp = login()
-	rungui(sp)
+	urlplay = 'https://api.spotify.com/v1/me/player/play'
+	sp._internal_call('PUT', urlplay, payload, params)
+	#rungui(sp)
 except spotipy.SpotifyException:
 	logging.error("Could not log in. Check user data.")
 	sys.exit(0)
