@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 import spotipy
-import spotipy.util as util
 import logging
 import io
 import urllib
 from PIL import ImageTk
 from PIL import Image as imImage
-from Tkinter import *
+from tkinter import *
 from helpers import *
 
 

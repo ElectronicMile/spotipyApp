@@ -5,7 +5,7 @@ import spotipy.util as util
 import logging
 import argparse
 import sys
-#from spotipyGUI import *
+from spotipyGUI import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -38,7 +38,7 @@ try:
 	sp = login()
 	urlplay = 'https://api.spotify.com/v1/me/player/play'
 	sp._internal_call('PUT', urlplay, payload, params)
-	#rungui(sp)
+	rungui(sp)
 except spotipy.SpotifyException:
 	logging.error("Could not log in. Check user data.")
 	sys.exit(0)
