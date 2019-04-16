@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 def login():
 	print(sys.argv[0])
-	scope = 'user-modify-playback-state user-library-read'
+	scope = 'user-modify-playback-state user-library-read user-read-currently-playing user-read-playback-state'
 
 	username = "1136425634"
 
@@ -25,21 +25,22 @@ def login():
 
 	return sp
 
-params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
-payload = None
-urlcurr = 'https://api.spotify.com/v1/me/player'
-urlpause = 'https://api.spotify.com/v1/me/player/pause'
-urlplay = 'https://api.spotify.com/v1/me/player/play'
-
-# currentlyplaying = sp._internal_call('GET', urlcurr, payload, params)
-# print currentlyplaying
-
-try:
-	sp = login()
+if __name__ == '__main__':
+	params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
+	payload = None
+	urlcurr = 'https://api.spotify.com/v1/me/player'
+	urlpause = 'https://api.spotify.com/v1/me/player/pause'
 	urlplay = 'https://api.spotify.com/v1/me/player/play'
-	sp._internal_call('PUT', urlplay, payload, params)
-	rungui(sp)
-except spotipy.SpotifyException:
-	logging.error("Could not log in. Check user data.")
-	sys.exit(0)
+
+	# currentlyplaying = sp._internal_call('GET', urlcurr, payload, params)
+	# print currentlyplaying
+
+	try:
+		sp = login()
+		urlplay = 'https://api.spotify.com/v1/me/player/play'
+		sp._internal_call('PUT', urlplay, payload, params)
+		rungui(sp)
+	except spotipy.SpotifyException:
+		logging.error("Could not log in. Check user data.")
+		sys.exit(0)
 

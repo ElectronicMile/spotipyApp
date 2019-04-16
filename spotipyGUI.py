@@ -3,7 +3,7 @@
 import spotipy
 import logging
 import io
-import urllib
+import urllib.request
 from PIL import ImageTk
 from PIL import Image as imImage
 from tkinter import *
@@ -30,7 +30,7 @@ def showresults(window, results):
 		currAlbumWidgets.append(label)
 
 	logging.info("URL is %s" % res.coverurl)
-	raw_data = urllib.urlopen(res.coverurl).read()
+	raw_data = urllib.request.urlopen(res.coverurl).read()
 	im = imImage.open(io.BytesIO(raw_data))
 	im = im.resize((350, 350), imImage.ANTIALIAS)
 	image = ImageTk.PhotoImage(im)
@@ -66,6 +66,9 @@ class App:
 		self.controlframe = LabelFrame(master, text="Play", borderwidth=1, padx=5, pady=5, relief=GROOVE, bg=self.bgcolor)
 		self.controlframe.grid(row=0, column=1, sticky=E + N)
 
+		self.nowplayingframe = LabelFrame(master, text="Now playing", borderwidth=1, padx=5, pady=5, relief=GROOVE, bg=self.bgcolor)
+		self.nowplayingframe.grid(row=0, column=2, sticky=E + W + N + S)
+
 		welcome = Label(self.queryframe, text="Welcome.", bg=self.bgcolor)
 		welcome.grid(sticky=W, column=0, row=0)
 
@@ -86,13 +89,24 @@ class App:
 		playbtn = Button(self.controlframe, text="play", command=self.play, bg=self.bgcolor)
 		playbtn.grid(sticky=W, column=0, row=1)
 
-		playbtn = Button(self.controlframe, text="pause", command=self.pause, bg=self.bgcolor)
-		playbtn.grid(sticky=W, column=1, row=1)
+		pausebtn = Button(self.controlframe, text="pause", command=self.pause, bg=self.bgcolor)
+		pausebtn.grid(sticky=W, column=1, row=1)
+
+		nextbtn = Button(self.controlframe, text="next", command=self.nexttrack, bg=self.bgcolor)
+		nextbtn.grid(sticky=W, column=1, row=2)
+
+		prevbtn = Button(self.controlframe, text="prev", command=self.prevtrack, bg=self.bgcolor)
+		prevbtn.grid(sticky=W, column=0, row=2)
 
 		self.master.bind('<Return>', self.search2)
 		self.master.bind('<Command-a>', self.selectall)
 		#self.master.bind('<Control-a>', self.selectall) Will work for Windows?
 
+
+	# variables for playback control
+	controlparams = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
+	controlpayload = None
+	controlurl = 'https://api.spotify.com/v1/me/player/%s'
 
 	# control commands: search, play, etc.
 
@@ -102,30 +116,23 @@ class App:
 		album_uri = self.txt.get()
 		#album_uri = "spotify:album:07RagZtMuBbLBnaWJbD52h"
 		try:
-			if album_uri != "spotify:track:4wupMhFWAQzP8CGROC1D2r":
-				results = self.sp.album(album_id=album_uri)
-				logging.info("Showing info for following album:\n%s" % results)
-				self.currentWidgets = showresults(self.resultframe, results)
-			else:
-				results = self.sp.audio_features(tracks=["spotify:track:4wupMhFWAQzP8CGROC1D2r"])
-				#results = self.sp.audio_analysis(track_id="spotify:track:4wupMhFWAQzP8CGROC1D2r")
-				logging.INFO(results)
+			results = self.sp.album(album_id=album_uri)
+			logging.info("Showing info for following album:\n%s" % results)
+			self.currentWidgets = showresults(self.resultframe, results)
 		except spotipy.SpotifyException:
 			self.errorText.pack()
 
 	def play(self):
-		params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
-		payload = None
-		urlcurr = 'https://api.spotify.com/v1/me/player'
-		urlpause = 'https://api.spotify.com/v1/me/player/pause'
-		urlplay = 'https://api.spotify.com/v1/me/player/play'
-		self.sp._internal_call('PUT', urlplay, payload, params)
+		self.sp._internal_call('PUT', self.controlurl % "play", self.controlpayload, self.controlparams)
 
 	def pause(self):
-		params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
-		payload = None
-		urlpause = 'https://api.spotify.com/v1/me/player/pause'
-		self.sp._internal_call('PUT', urlpause, payload, params)
+		self.sp._internal_call('PUT', self.controlurl % "pause", self.controlpayload, self.controlparams)
+
+	def nexttrack(self):
+		self.sp._internal_call('POST', self.controlurl % "next", self.controlpayload, self.controlparams)
+
+	def prevtrack(self):
+		self.sp._internal_call('POST', self.controlurl % "previous", self.controlpayload, self.controlparams)
 
 	# commands for keyboard shortcuts
 
