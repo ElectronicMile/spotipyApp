@@ -98,6 +98,9 @@ class App:
 		prevbtn = Button(self.controlframe, text="prev", command=self.prevtrack, bg=self.bgcolor)
 		prevbtn.grid(sticky=W, column=0, row=2)
 
+		nowplaying = Button(self.controlframe, text="Now playing", command=self.nowplaying, bg=self.bgcolor)
+		nowplaying.grid(sticky=W,column=2,row=2)
+
 		self.master.bind('<Return>', self.search2)
 		self.master.bind('<Command-a>', self.selectall)
 		#self.master.bind('<Control-a>', self.selectall) Will work for Windows?
@@ -133,6 +136,16 @@ class App:
 
 	def prevtrack(self):
 		self.sp._internal_call('POST', self.controlurl % "previous", self.controlpayload, self.controlparams)
+
+	def nowplaying(self):
+		urlplayer = 'https://api.spotify.com/v1/me/player'
+		params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
+		payload = None
+		curr = sp._internal_call('GET', urlplayer, payload, params)
+		if not curr:
+			logging.info("Currently not playing anything on Spotify.")
+		else:
+			logging.info(process_context(curr, sp))
 
 	# commands for keyboard shortcuts
 
