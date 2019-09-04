@@ -2,10 +2,9 @@
 
 import spotipy
 import logging
-import io
-import urllib.request
-from PIL import ImageTk
+import requests
 from PIL import Image as imImage
+from io import BytesIO
 from tkinter import *
 from helpers import *
 
@@ -30,10 +29,9 @@ def showresults(window, results):
 		currAlbumWidgets.append(label)
 
 	logging.info("URL is %s" % res.coverurl)
-	raw_data = urllib.request.urlopen(res.coverurl).read()
-	im = imImage.open(io.BytesIO(raw_data))
-	im = im.resize((350, 350), imImage.ANTIALIAS)
-	image = ImageTk.PhotoImage(im)
+	raw_data = requests.get(res.coverurl)
+	im = imImage.open(BytesIO(raw_data))
+	image = PhotoImage(im)
 	imageLabel = Label(window, image=image)
 	imageLabel.image = image
 	imageLabel.grid(column=0, row=id + 5)
