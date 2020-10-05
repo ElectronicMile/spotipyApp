@@ -30,7 +30,7 @@ def showresults(window, results):
 
 	logging.info("URL is %s" % res.coverurl)
 	raw_data = requests.get(res.coverurl)
-	im = imImage.open(BytesIO(raw_data))
+	im = imImage.open(BytesIO(raw_data.content))
 	image = PhotoImage(im)
 	imageLabel = Label(window, image=image)
 	imageLabel.image = image
@@ -38,6 +38,37 @@ def showresults(window, results):
 	currAlbumWidgets.append(imageLabel)
 
 	return currAlbumWidgets
+
+def process_context(curr, sp):
+
+	context_is_type = True
+	print(curr)
+	try:
+		type = curr["context"]["type"]
+		uri = curr["context"]["uri"]
+		if not curr["is_playing"]:
+			return "Currently paused"
+	except TypeError:
+		context_is_type = False
+
+	track = curr["item"]["name"]
+	artist = curr["item"]["artists"][0]["name"]
+	device = curr["device"]["name"]
+
+	if type == "artist":
+		contextname = sp.artist(uri)["name"]
+	elif type == "album":
+		contextname = sp.album(uri)["name"]
+	elif type == "playlist":
+		contextname = sp.user_playlist(user=sp.user, playlist_id=uri)["name"]
+
+	if context_is_type:
+		out =  "The context is of type %s: '%s'. Currently the track '%s' by '%s' is playing on %s." % (type, contextname, track, artist, device)
+	else:
+		out = "There is no context, you are listening to your library. Currently the track %s by %s is playing on %s." % (type, track, artist, device)
+
+	return out
+
 
 class App:
 
@@ -139,11 +170,11 @@ class App:
 		urlplayer = 'https://api.spotify.com/v1/me/player'
 		params = {'country': None, 'album_type': None, 'limit': 20, 'offset': 0}
 		payload = None
-		curr = sp._internal_call('GET', urlplayer, payload, params)
+		curr = self.sp._internal_call('GET', urlplayer, payload, params)
 		if not curr:
 			logging.info("Currently not playing anything on Spotify.")
 		else:
-			logging.info(process_context(curr, sp))
+			logging.info(process_context(curr, self.sp))
 
 	# commands for keyboard shortcuts
 

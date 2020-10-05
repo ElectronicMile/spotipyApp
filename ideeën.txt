@@ -7,3 +7,5 @@ Voeg een "Now Playing" toe rechts vanboven (0,1): check om de zoveel seconden wa
 Toon audio features voor een bepaalde track (zie https://github.com/plamere/spotipy/blob/master/examples/audio_features.py)
 
 Na resultaat: één format functie die alle info als strings teruggeeft (dict?). Album als klasse met track attributen enzo
+
+quiz maken
